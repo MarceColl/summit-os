@@ -109,11 +109,13 @@ _start:
 	# Set up the GDT as defined in gdt.s
 	lgdt (gdt_info)
 
-	# sti
-	# int $1
+	# Set up the IDT
+	lidt (idt_info)
 
 	# Enter the high-level kernel.
 	call kernel_main
+
+	call irpt_test
 
 	# Infinite loop if the system has nothing more to do.
 	cli

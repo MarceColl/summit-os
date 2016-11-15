@@ -1,3 +1,7 @@
+# GDT.S - Summit OS
+# Global Descriptor Table
+# Marcelino Coll Rovira
+
 # GDT ENTRY SCHEME
 # -----------------------------------------------------------------------
 # | 31                            16 | 15                             0 |
@@ -12,6 +16,7 @@
 .section .data
 gdt_start:
 	# NULL descriptor
+	.long 0x0
 	.long 0x0
 	
 	###############
@@ -64,7 +69,7 @@ gdt_start:
 	#               Granularity bit, if 0 limit is in 1B blocks, if 1 in 4KiB blocks (page granularity)
 	.word 0xFC00
 
-
+.globl gdt_info
 gdt_info:
 	.word gdt_info - gdt_start - 1
 	.long gdt_start
