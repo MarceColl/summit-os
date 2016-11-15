@@ -106,6 +106,12 @@ _start:
 	# Set up the stack.
 	mov $stack_top, %esp
 
+	# Set up the GDT as defined in gdt.s
+	lgdt (gdt_info)
+
+	# sti
+	# int $1
+
 	# Enter the high-level kernel.
 	call kernel_main
 

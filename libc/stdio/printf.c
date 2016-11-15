@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
+
 static bool print(const char* data, size_t length) {
 	const unsigned char* bytes = (const unsigned char*) data;
 	for (size_t i = 0; i < length; i++)
@@ -11,6 +12,7 @@ static bool print(const char* data, size_t length) {
 			return false;
 	return true;
 }
+
 
 int printf(const char* restrict format, ...) {
 	va_list parameters;
@@ -61,6 +63,15 @@ int printf(const char* restrict format, ...) {
 			if (!print(str, len))
 				return -1;
 			written += len;
+		} else if (*format == 'd') {
+			format++;
+			int i_value = (int)va_arg(parameters, int);
+			if (!maxrem) {
+				return -1;
+			}
+			if (!print("NUMBER", 6))
+				return -1;
+			written += 6;
 		} else {
 			format = format_begun_at;
 			size_t len = strlen(format);
