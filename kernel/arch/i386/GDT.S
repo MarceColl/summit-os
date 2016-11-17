@@ -17,7 +17,7 @@
 gdt_start:
 	# NULL descriptor
 	.long 0x0
-	.long 0x0
+	# .long 0x0
 	
 	###############
 	# Kernel Data # All memory, data, write

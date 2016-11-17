@@ -1,9 +1,15 @@
+# Summit OS
+# Marcelino Coll 2016
+# file: boot.S
+
+
 # Declare constants for the multiboot header.
 .set ALIGN,    1<<0             # align loaded modules on page boundaries
 .set MEMINFO,  1<<1             # provide memory map
 .set FLAGS,    ALIGN | MEMINFO  # this is the Multiboot 'flag' field
 .set MAGIC,    0x1BADB002       # 'magic number' lets bootloader find the header
 .set CHECKSUM, -(MAGIC + FLAGS) # checksum of above, to prove we are multiboot
+
 
 # Declare a multiboot header that marks the program as a kernel.
 .section .multiboot
@@ -12,22 +18,25 @@
 .long FLAGS
 .long CHECKSUM
 
+
 # Allocate the initial stack.
 .section .bootstrap_stack, "aw", @nobits
 stack_bottom:
 .skip 16384 # 16 KiB
 stack_top:
 
+
 # Preallocate pages used for paging. Don't hard-code addresses and assume they
 # are available, as the bootloader might have loaded its multiboot structures or
 # modules there. This lets the bootloader know it must avoid the addresses.
 .section .bss, "aw", @nobits
-	.align 4096
+.align 4096
 boot_pagedir:
 	.skip 4096
 boot_pagetab1:
 	.skip 4096
 # Further page tables may be required if the kernel grows beyond 3 MiB.
+
 
 # The kernel entry point.
 .section .text
@@ -94,7 +103,7 @@ _start:
 	jmp *%ecx
 
 4:
-	# At this point, paging is fully set up and enabled.i
+	# At this point, paging is fully set up and enabled.
 
 	# Unmap the identity mapping as it is now unnecessary. 
 	movl $0, boot_pagedir + 0
