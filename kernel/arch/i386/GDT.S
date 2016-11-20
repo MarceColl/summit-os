@@ -20,6 +20,7 @@ gdt_start:
 	.long 0x0
 	.long 0x0
 	
+
 	###############
 	# Kernel Data # All memory, data, write
 	###############
@@ -45,6 +46,7 @@ gdt_start:
 	#               Granularity bit, if 0 limit is in 1B blocks, if 1 in 4KiB blocks (page granularity)
 	.word 0x00CF
 
+
 	###############
 	# Kernel Code # All memory, code, read
 	###############
@@ -69,6 +71,7 @@ gdt_start:
 	#               | Size bit, if 0 defines 16 bit protected mode, if 1 32 bit protected mode
 	#               Granularity bit, if 0 limit is in 1B blocks, if 1 in 4KiB blocks (page granularity)
 	.word 0x00CF
+
 
 .globl gdt_info
 .align 8

@@ -35,6 +35,7 @@ boot_pagedir:
 	.skip 4096
 boot_pagetab1:
 	.skip 4096
+	.skip 4096
 # Further page tables may be required if the kernel grows beyond 3 MiB.
 
 
@@ -121,10 +122,10 @@ _start:
 	# Set up the IDT
 	lidt (idt_info)
 
+	call idt_setup
+
 	# Enter the high-level kernel.
 	call kernel_main
-
-	call irpt_test
 
 	# Infinite loop if the system has nothing more to do.
 	cli
