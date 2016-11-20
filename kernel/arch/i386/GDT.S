@@ -14,10 +14,11 @@
  
 
 .section .data
+.align 8
 gdt_start:
 	# NULL descriptor
 	.long 0x0
-	# .long 0x0
+	.long 0x0
 	
 	###############
 	# Kernel Data # All memory, data, write
@@ -35,14 +36,14 @@ gdt_start:
 	#              | | from an equal or lower privilege level than the privilege. 0 and can only be accessed by privilege.
 	#              | RW bit, when data if write access is enabled, for code if read access is allowed.
 	#              Ac bit. Just set to 0, CPU sets this to 1 when segment is accessed
-	.word 0x0049
+	.word 0x9200
 	# Limit 16:19 | Flags | Base 24:31.
 	# 0000        | 1 1 00
 	#               | | |
 	#               | | Always 0
 	#               | Size bit, if 0 defines 16 bit protected mode, if 1 32 bit protected mode
 	#               Granularity bit, if 0 limit is in 1B blocks, if 1 in 4KiB blocks (page granularity)
-	.word 0xFC00
+	.word 0x00CF
 
 	###############
 	# Kernel Code # All memory, code, read
@@ -60,16 +61,17 @@ gdt_start:
 	#              | | from an equal or lower privilege level than the privilege. 0 and can only be accessed by privilege.
 	#              | RW bit, when data if write access is enabled, for code if read access is allowed.
 	#              Ac bit. Just set to 0, CPU sets this to 1 when segment is accessed
-	.word 0x0059
+	.word 0x9A00
 	# Limit 16:19 | Flags | Base 24:31.
 	# 0000        | 1 1 00
 	#               | | |
 	#               | | Always 0
 	#               | Size bit, if 0 defines 16 bit protected mode, if 1 32 bit protected mode
 	#               Granularity bit, if 0 limit is in 1B blocks, if 1 in 4KiB blocks (page granularity)
-	.word 0xFC00
+	.word 0x00CF
 
 .globl gdt_info
+.align 8
 gdt_info:
 	.word gdt_info - gdt_start - 1
 	.long gdt_start

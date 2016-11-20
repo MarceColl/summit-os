@@ -4,20 +4,22 @@
 
 .section .text
 int_handler:
-	movl $0x123abc, 0x0
+	movl $0x123abc, 0xC03FF000
 	iret
+
 
 .globl irpt_test
 irpt_test:
+	xchg %bx, %bx
 	movl $int_handler, %eax
-	mov %ax, idt_start+49*16
-	movw $0x10, idt_start+49*16+2
-	movw $0x8e00, idt_start+49*16+4
+	mov %ax, idt_start+0*16
+	movw $0x10, idt_start+0*16+2
+	movw $0x8e00, idt_start+0*16+4
 	shr $16, %eax
-	mov %ax, idt_start+49*16+6
+	mov %ax, idt_start+0*16+6
 	shr $16, %eax
-	mov %eax, idt_start+49*16+8
-	# int $0x49	
+	mov %eax, idt_start+0*16+8
+	int $0x00	
 
 
 .section .data
@@ -25,9 +27,8 @@ irpt_test:
 idt_start:
 	.skip 50*16	
 
+
 .globl idt_info
 idt_info:
 	.word idt_info - idt_start - 1
 	.long idt_start
-
-
