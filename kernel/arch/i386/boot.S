@@ -105,7 +105,6 @@ _start:
 
 4:
 	# At this point, paging is fully set up and enabled.
-
 	# Unmap the identity mapping as it is now unnecessary. 
 	movl $0, boot_pagedir + 0
 
@@ -123,6 +122,8 @@ _start:
 	lidt (idt_info)
 
 	call idt_setup
+
+	int $0x0
 
 	# Enter the high-level kernel.
 	call kernel_main

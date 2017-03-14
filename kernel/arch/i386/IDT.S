@@ -5,25 +5,25 @@
 
 .macro gate index, handler
 	movl \handler, %eax
-	mov %ax, idt_start+\index*8
-	movw $0x10, idt_start+\index*8+2
-	movw $0x8e00, idt_start+\index*8+4
-	shr $8, %eax
-	mov %ax, idt_start+\index*8+6
-	shr $8, %eax
-	mov %eax, idt_start+\index*8+8
+	mov %ax, idt_start+\index*16
+	movw $0x10, idt_start+\index*16+2
+	movw $0x8e00, idt_start+\index*16+4
+	shr $16, %eax
+	mov %ax, idt_start+\index*16+6
+	shr $16, %eax
+	mov %eax, idt_start+\index*16+8
 .endm
 
 
 .section .text
 int_handler:
+	xchg %bx, %bx
 	movl $0x123abc, 0xC03FF000
 	iret
 
 
 .globl idt_setup
 idt_setup:
-	xchg %bx, %bx
 	gate 0, $int_handler
 	gate 1, $int_handler
 	gate 2, $int_handler
@@ -56,7 +56,8 @@ idt_setup:
 	gate 29, $int_handler
 	gate 30, $int_handler
 	gate 31, $int_handler
-	# int $0x00
+	# int $0x01
+	ret
 
 
 .section .data
