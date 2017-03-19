@@ -22,7 +22,9 @@ int_handler:
 	iret
 
 
-.globl idt_setup
+.section .text
+.globl 	idt_setup
+.type	idt_setup, @function
 idt_setup:
 	gate 0, $int_handler
 	gate 1, $int_handler

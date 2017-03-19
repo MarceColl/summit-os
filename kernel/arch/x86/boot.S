@@ -32,12 +32,15 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
+	movl	$stack_top, %esp
 	# Switch to protected mode to prepare 
 	# for long mode switch
 	call 	switch_to_protmode
 
 	# Switch to long mode
 	# call 	switch_to_longmode
+
+	xchgw	%bx, %bx
 
 	# Infinite loop if the system has nothing more to do.
 	cli
