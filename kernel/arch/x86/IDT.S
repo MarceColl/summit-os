@@ -56,7 +56,6 @@ idt_setup:
 	gate 29, $int_handler
 	gate 30, $int_handler
 	gate 31, $int_handler
-	# int $0x01
 	ret
 
 

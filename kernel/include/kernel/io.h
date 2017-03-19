@@ -1,3 +1,5 @@
+#ifndef __SUMMIT_IO__
+#define __SUMMIT_IO__
 
 static inline char inb(short port)
 {
@@ -7,3 +9,5 @@ static inline char inb(short port)
                    : "Nd"(port) );
     return ret;
 }
+
+#endif
