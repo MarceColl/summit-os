@@ -53,7 +53,7 @@ $(ARCHDIR)/crtn.o \
 all: summit.kernel
 
 summit.kernel: $(OBJS) $(ARCHDIR)/linker.ld
-	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS) $(LINK_LIST)
+	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS) $(LINK_LIST) -mcmodel=kernel
 	grub-file --is-x86-multiboot summit.kernel
 
 $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
@@ -63,7 +63,7 @@ $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
 
 .S.o:
-	i686-elf-as -I$(ARCHDIR) -c $< -o $@ --gstabs+
+	x86_64-elf-as -I$(ARCHDIR) -c $< -o $@ --gstabs+
 
 clean:
 	rm -f summit.kernel
