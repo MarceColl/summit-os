@@ -18,11 +18,13 @@
 .section .text
 int_handler:
 	xchg %bx, %bx
-	movl $0x123abc, 0xC03FF000
+	# movl $0x123abc, 0xC03FF000
 	iret
 
 
-.globl idt_setup
+.section .text
+.globl 	idt_setup
+.type	idt_setup, @function
 idt_setup:
 	gate 0, $int_handler
 	gate 1, $int_handler
@@ -56,7 +58,6 @@ idt_setup:
 	gate 29, $int_handler
 	gate 30, $int_handler
 	gate 31, $int_handler
-	# int $0x01
 	ret
 
 
