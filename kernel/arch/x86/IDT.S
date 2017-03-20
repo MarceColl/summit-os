@@ -18,7 +18,7 @@
 .section .text
 int_handler:
 	xchg %bx, %bx
-	movl $0x123abc, 0xC03FF000
+	# movl $0x123abc, 0xC03FF000
 	iret
 
 

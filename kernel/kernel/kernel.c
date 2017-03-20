@@ -17,14 +17,14 @@ void print_banner() {
 
 
 void kernel_main(void) {
-	terminal_initialize();
+	// terminal_initialize();
 	// print_banner();
 	
 	char prev = 0;
 	while(1) {
 		char c = inb(0x60);
 		if(c != prev) {
-			printf("%c", c);
+			// printf("%c", c);
 			prev = c;
 		}
 	}

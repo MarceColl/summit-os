@@ -26,21 +26,23 @@ stack_bottom:
 stack_top:
 
 
-
 # The kernel entry point.
 .section .text
 .global _start
 .type _start, @function
 _start:
+	# Initialize bootstrap stack
 	movl	$stack_top, %esp
+
 	# Switch to protected mode to prepare 
 	# for long mode switch
 	call 	switch_to_protmode
 
 	# Switch to long mode
-	# call 	switch_to_longmode
+	call 	switch_to_longmode
 
-	xchgw	%bx, %bx
+	# 64bit environment has been initialized, starting kernel
+	call 	kernel_main
 
 	# Infinite loop if the system has nothing more to do.
 	cli

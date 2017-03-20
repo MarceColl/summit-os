@@ -2,8 +2,6 @@
 # Marcelino Coll Rovira 2016-2017
 # file: protmode.S
 
-.equ HIGH_OFFSET, 0x00000000
-
 .section .bss, "aw", @nobits
 .align 4096
 boot_pagedir:
@@ -15,13 +13,13 @@ boot_pagetab1:
 .section .text
 .type setup_protmode_paging, @function
 setup_protmode_paging:
-	movl 	$(boot_pagetab1 - HIGH_OFFSET), %edi
+	movl 	$boot_pagetab1, %edi
 	movl	$0x0, %esi
 
 1:
-	cmpl	$(_kernel_start - HIGH_OFFSET), %esi
+	cmpl	$_kernel_start, %esi
 	jl	2f
-	cmpl	$(_kernel_end - HIGH_OFFSET), %esi
+	cmpl	$_kernel_end, %esi
 	jge	3f
 
 	movl	%esi, %edx
@@ -34,8 +32,8 @@ setup_protmode_paging:
 	loop 	1b
 
 3:
-	movl	$(boot_pagetab1 - HIGH_OFFSET + 0x003), boot_pagedir - HIGH_OFFSET 
-	movl 	$(boot_pagedir - HIGH_OFFSET), %ecx
+	movl	$(boot_pagetab1 + 0x003), boot_pagedir 
+	movl 	$boot_pagedir, %ecx
 	movl	%ecx, %cr3
 
 	# Enable paging bit (31) in cr0
