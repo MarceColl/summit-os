@@ -2,6 +2,9 @@
 # Marcelino Coll Rovira 2016-2017
 # file: protmode.S
 
+.equ	VIRTUAL_BASE, 0xC0000000
+
+
 .section .bss, "aw", @nobits
 .align 4096
 boot_pagedir:
@@ -13,13 +16,13 @@ boot_pagetab1:
 .section .text
 .type setup_protmode_paging, @function
 setup_protmode_paging:
-	movl 	$boot_pagetab1, %edi
+	movl 	$(boot_pagetab1 - VIRTUAL_BASE), %edi
 	movl	$0x0, %esi
 
 1:
-	cmpl	$_kernel_start, %esi
+	cmpl	$(_kernel_start - VIRTUAL_BASE), %esi
 	jl	2f
-	cmpl	$_kernel_end, %esi
+	cmpl	$(_kernel_end - VIRTUAL_BASE), %esi
 	jge	3f
 
 	movl	%esi, %edx
@@ -32,8 +35,8 @@ setup_protmode_paging:
 	loop 	1b
 
 3:
-	movl	$(boot_pagetab1 + 0x003), boot_pagedir 
-	movl 	$boot_pagedir, %ecx
+	movl	$(boot_pagetab1 - VIRTUAL_BASE + 0x003), boot_pagedir - VIRTUAL_BASE
+	movl 	$(boot_pagedir - VIRTUAL_BASE), %ecx
 	movl	%ecx, %cr3
 
 	# Enable paging bit (31) in cr0

@@ -1,13 +1,14 @@
-
 .section .text
 .global switch_to_longmode
 .type 	switch_to_longmode, @function
 switch_to_longmode:
-	xchgw	%bx, %bx
-
 	movl	%cr0, %ecx
 	andl	$0x7FFFFFFF, %ecx
 	movl	%ecx, %cr0
+
+	# TODO:
+	#	* Setup 64 bits GDT
+	#	* Setup 64 bits IDT
 
 	# TODO: 
 	#	* Setup IA-32e paging structures

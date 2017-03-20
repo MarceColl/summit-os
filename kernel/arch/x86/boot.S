@@ -32,7 +32,7 @@ stack_top:
 .type _start, @function
 _start:
 	# Initialize bootstrap stack
-	movl	$stack_top, %esp
+	movl	$(stack_top - 0xC0000000), %esp
 
 	# Switch to protected mode to prepare 
 	# for long mode switch
