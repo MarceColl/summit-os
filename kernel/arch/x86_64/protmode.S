@@ -4,7 +4,7 @@
 
 .equ	VIRTUAL_BASE, 0xFFFFFFFF80000000
 
-.code64
+.code32
 .section .bss, "aw", @nobits
 .align 4096
 boot_pagedir:
@@ -16,33 +16,33 @@ boot_pagetab1:
 .section .text
 .type setup_protmode_paging, @function
 setup_protmode_paging:
-	movq 	$(boot_pagetab1 - VIRTUAL_BASE), %rdi
-	movq	$0x0, %rsi
+	movl 	$(boot_pagetab1 - VIRTUAL_BASE), %edi
+	movl	$0x0, %esi
 
 1:
-	cmpq	$(_kernel_start - VIRTUAL_BASE), %rsi
+	cmpl	$(_kernel_start - VIRTUAL_BASE), %esi
 	jl	2f
-	cmpq	$(_kernel_end - VIRTUAL_BASE), %rsi
+	cmpl	$(_kernel_end - VIRTUAL_BASE), %esi
 	jge	3f
 
-	movq	%rsi, %rdx
-	orq	$0x003, %rdx
-	movq	%rdx, (%rdi)
+	movl	%esi, %edx
+	orl	$0x003, %edx
+	movl	%edx, (%edi)
 
 2:
-	addq	$4096, %rsi
-	addq	$4, %rdi
+	addl	$4096, %esi
+	addl	$4, %edi
 	loop 	1b
 
 3:
-	movq	$(boot_pagetab1 - VIRTUAL_BASE + 0x003), boot_pagedir - VIRTUAL_BASE
-	movq 	$(boot_pagedir - VIRTUAL_BASE), %rcx
-	movq	%rcx, %cr3
+	movl	$(boot_pagetab1 - VIRTUAL_BASE + 0x003), boot_pagedir - VIRTUAL_BASE
+	movl 	$(boot_pagedir - VIRTUAL_BASE), %ecx
+	movl	%ecx, %cr3
 
 	# Enable paging bit (31) in cr0
-	movq 	%cr0, %rdx
-	orl 	$0x80000000, %edx
-	movq 	%rdx, %cr0
+	movl 	%cr0, %ecx
+	orl 	$0x80000000, %ecx
+	movl 	%ecx, %cr0
 
 	ret
 

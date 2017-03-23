@@ -2,6 +2,7 @@
 # Marcelino Coll 2016
 # file: boot.S
 
+.equ	VIRTUAL_BASE, 0xFFFFFFFF80000000
 
 # Declare constants for the multiboot header.
 .set ALIGN,    1<<0             # align loaded modules on page boundaries
@@ -25,14 +26,14 @@ stack_bottom:
 .skip 16384 # 16 KiB
 stack_top:
 
-.code64
 # The kernel entry point.
 .section .text
 .global _start
 .type _start, @function
 _start:
+	.code32
 	# Initialize bootstrap stack
-	movq	$(stack_top - 0xC0000000), %rsp
+	movl	$(stack_top - VIRTUAL_BASE), %esp
 
 	# Switch to protected mode to prepare 
 	# for long mode switch
@@ -42,10 +43,8 @@ _start:
 	call 	switch_to_longmode
 
 	.code64
-	xchgw	%bx, %bx
-
 	# 64bit environment has been initialized, starting kernel
-	call 	kernel_main
+	# call 	kernel_main
 
 	# Infinite loop if the system has nothing more to do.
 	cli

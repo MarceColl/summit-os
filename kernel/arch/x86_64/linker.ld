@@ -1,6 +1,7 @@
 ENTRY (_start)
 
 VIRTUAL_BASE = 0xFFFFFFFF80000000;
+PHYSICAL_BASE = 0x0000000000100000;
 
 SECTIONS
 {
@@ -9,29 +10,31 @@ SECTIONS
 		*(.multiboot)
 	}
 
-	. = 0x0100000;
+	. = PHYSICAL_BASE;
 
 	_kernel_start = VIRTUAL_BASE + .;
 	.boot :
 	{
-		_code = .;
+		_boot = .;
 		*(.boot)
 	}
 
-	. += VIRTUAL_BASE;
-	.text ALIGN (0x1000) : AT (ADDR (.text) - VIRTUAL_BASE)
+	. = VIRTUAL_BASE + PHYSICAL_BASE;
+	.text ALIGN (4K) : AT (ADDR (.text) - VIRTUAL_BASE)
 	{
-		_data = .;
+		_code = .;
 		*(.text)
-		*(.bootstrap_stack)
 	}
 	.rodata ALIGN (4K) : AT (ADDR (.rodata) - VIRTUAL_BASE)
 	{
+		_rodata = .;
 		*(.rodata)
 	}
 	.data ALIGN (4K) : AT (ADDR (.data) - VIRTUAL_BASE)
 	{
+		_data = .;
 		*(.data)
+		*(.bootstrap_stack)
 	}
 	.bss ALIGN (4K) : AT (ADDR (.bss) - VIRTUAL_BASE)
 	{

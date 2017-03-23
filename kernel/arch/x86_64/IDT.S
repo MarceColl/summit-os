@@ -2,21 +2,23 @@
 # Interrupt Descriptor Table
 # Marcelino Coll Rovira
 
-.code64
+
 .macro gate index, handler
-	movq \handler, %rax
-	movq %rax, idt_start+\index*16
-	movq $0x10, idt_start+\index*16+2
-	movq $0x8e00, idt_start+\index*16+4
-	shr $16, %rax
-	mov %rax, idt_start+\index*16+6
-	shr $16, %rax
-	movq %rax, idt_start+\index*16+8
+	movl \handler, %eax
+	mov %ax, idt_start+\index*16
+	movw $0x10, idt_start+\index*16+2
+	movw $0x8e00, idt_start+\index*16+4
+	shr $16, %eax
+	mov %ax, idt_start+\index*16+6
+	shr $16, %eax
+	mov %eax, idt_start+\index*16+8
 .endm
+
 
 .section .text
 int_handler:
 	xchg %bx, %bx
+	# movl $0x123abc, 0xC03FF000
 	iret
 
 
@@ -65,8 +67,7 @@ idt_start:
 	.skip 50*16	
 
 
-.section .data
 .globl idt_info
 idt_info:
 	.word idt_info - idt_start - 1
-	.quad idt_start
+	.long idt_start

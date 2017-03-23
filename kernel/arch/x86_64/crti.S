@@ -1,3 +1,4 @@
+.code64
 .section .init
 .global _init
 .type _init, @function

@@ -77,4 +77,4 @@ gdt_start:
 .align 8
 gdt_info:
 	.word gdt_info - gdt_start - 1
-	.quad gdt_start
+	.long gdt_start

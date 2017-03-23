@@ -2,9 +2,9 @@ DEFAULT_HOST!=../default-host.sh
 HOST?=DEFAULT_HOST
 HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
 
-CFLAGS?=-O2 -g
+CFLAGS?=-O2 -g -mcmodel=kernel
 CPPFLAGS?=
-LDFLAGS?=
+LDFLAGS?= -mcmodel=kernel
 LIBS?=
 
 DESTDIR?=
@@ -53,7 +53,7 @@ $(ARCHDIR)/crtn.o \
 all: summit.kernel
 
 summit.kernel: $(OBJS) $(ARCHDIR)/linker.ld
-	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS) $(LINK_LIST) -mcmodel=kernel
+	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(LDFLAGS) $(LINK_LIST)
 	grub-file --is-x86-multiboot summit.kernel
 
 $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
@@ -63,7 +63,7 @@ $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
 
 .S.o:
-	x86_64-elf-as -I$(ARCHDIR) -c $< -o $@ --gstabs+
+	$(AS) -I$(ARCHDIR) -c $< -o $@ --gstabs+ 
 
 clean:
 	rm -f summit.kernel
