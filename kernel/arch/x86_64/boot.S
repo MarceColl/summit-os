@@ -27,13 +27,13 @@ stack_bottom:
 stack_top:
 
 # The kernel entry point.
-.section .text
+.section .boot
 .global _start
 .type _start, @function
 _start:
 	.code32
 	# Initialize bootstrap stack
-	movl	$(stack_top - VIRTUAL_BASE), %esp
+	movl	stack_top, %esp
 
 	# Switch to protected mode to prepare 
 	# for long mode switch

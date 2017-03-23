@@ -17,6 +17,21 @@ SECTIONS
 	{
 		_boot = .;
 		*(.boot)
+		arch/x86_64/boot.o (.text)
+		arch/x86_64/longmode.o (.text)
+		arch/x86_64/protmode.o (.text)
+		arch/x86_64/protmode.o (.bss)
+		arch/x86_64/GDT.o (.text)
+		arch/x86_64/GDT.o (.data)
+		arch/x86_64/IDT.o (.text)
+		arch/x86_64/IDT.o (.data)
+		arch/x86_64/crti.o (.text)
+		*(.bootstrap_stack)
+		*(.init)
+		*(.fini)
+		*(.jcr)
+		*(.ctors)
+		*(.dtors)
 	}
 
 	. = VIRTUAL_BASE + PHYSICAL_BASE;
@@ -34,7 +49,6 @@ SECTIONS
 	{
 		_data = .;
 		*(.data)
-		*(.bootstrap_stack)
 	}
 	.bss ALIGN (4K) : AT (ADDR (.bss) - VIRTUAL_BASE)
 	{

@@ -1,8 +1,8 @@
-DEFAULT_HOST!=../default-host.sh
-HOST?=DEFAULT_HOST
+DEFAULT_HOST!=../default-host.sh 
+HOST?=DEFAULT_HOST 
 HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
 
-CFLAGS?=-O2 -g -mcmodel=kernel
+CFLAGS?=-O2 -g -mcmodel=kernel --m64
 CPPFLAGS?=
 LDFLAGS?= -mcmodel=kernel
 LIBS?=
